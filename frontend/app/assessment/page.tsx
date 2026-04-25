@@ -10,24 +10,20 @@ export default function AssessmentPage() {
   const [assessment, setAssessment] = useState<any>(null);
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [activeIdx, setActiveIdx] = useState(0);
-  const [error, setError] = useState('');
 
-  const userId = useMemo(() => (typeof window !== 'undefined' ? localStorage.getItem('user_id') ?? '' : ''), []);
-  const resumeId = useMemo(() => (typeof window !== 'undefined' ? localStorage.getItem('resume_id') ?? '' : ''), []);
-  const jdId = useMemo(() => (typeof window !== 'undefined' ? localStorage.getItem('jd_id') ?? '' : ''), []);
+  const userId = useMemo(() => typeof window !== 'undefined' ? localStorage.getItem('user_id') ?? '' : '', []);
+  const resumeId = useMemo(() => typeof window !== 'undefined' ? localStorage.getItem('resume_id') ?? '' : '', []);
+  const jdId = useMemo(() => typeof window !== 'undefined' ? localStorage.getItem('jd_id') ?? '' : '', []);
 
   useEffect(() => {
     async function boot() {
       if (!userId || !resumeId || !jdId) return;
       setLoading(true);
-      setError('');
       try {
         await apiPost('/extract-skills', { user_id: userId, resume_id: resumeId, jd_id: jdId });
         const started = await apiPost<any>('/start-assessment', { user_id: userId, resume_id: resumeId, jd_id: jdId });
         setAssessment(started.data);
         localStorage.setItem('assessment_id', started.data.assessment_id);
-      } catch {
-        setError('Could not initialize assessment. Ensure resume and JD are uploaded first.');
       } finally {
         setLoading(false);
       }
@@ -58,30 +54,22 @@ export default function AssessmentPage() {
   const question = assessment?.questions?.[activeIdx];
 
   return (
-    <div className="space-y-4 max-w-5xl">
+    <div className="space-y-4">
       <div className="card">
-        <h2 className="text-2xl font-semibold">Conversational Assessment (Web)</h2>
-        <p className="text-sm text-slate-600 mt-1">Answer each question with specific examples from your work.</p>
-
-        {loading && <div className="mt-4"><LoadingSpinner label="Running adaptive assessment..." /></div>}
-        {error && <p className="text-red-600 mt-3">{error}</p>}
-        {!loading && !assessment && !error && <p className="text-slate-600 mt-3">Upload resume and JD first.</p>}
-
+        <h2 className="text-xl font-semibold">Conversational Skill Assessment</h2>
+        {loading && <LoadingSpinner label="Running adaptive assessment..." />}
+        {!loading && !assessment && <p className="text-slate-600">Upload resume and JD first.</p>}
         {question && (
-          <div className="space-y-3 mt-6">
-            <div className="flex items-center justify-between text-sm text-slate-500">
-              <span>Question {activeIdx + 1} of {assessment?.questions?.length ?? 0}</span>
-              <span>Skill: {question.skill}</span>
-            </div>
-            <p className="font-medium">{question.question}</p>
-            <textarea className="w-full h-36 border rounded-lg p-3" value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} />
+          <div className="space-y-3 mt-4">
+            <p className="font-medium">Skill: {question.skill}</p>
+            <p>{question.question}</p>
+            <textarea className="w-full h-28 border rounded-lg p-2" value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} />
             <button className="px-4 py-2 bg-brand text-white rounded-lg" onClick={submitAnswer} disabled={loading || !currentAnswer.trim()}>
               Submit Answer
             </button>
           </div>
         )}
-
-        {assessment && !question && <p className="mt-6 text-emerald-700">Assessment complete. Open Report page to review final output.</p>}
+        {assessment && !question && <p className="mt-4">Assessment complete. Open dashboard for report.</p>}
       </div>
     </div>
   );

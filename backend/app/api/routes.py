@@ -13,7 +13,7 @@ from app.schemas import (
     SubmitAnswerInput,
 )
 from app.services.extraction import extract_jd_structured, extract_resume_structured
-from app.services.parser import ParserError, parse_docx, parse_pdf
+from app.services.parser import parse_docx, parse_pdf
 
 router = APIRouter()
 workflow = build_workflow()
@@ -21,18 +21,15 @@ workflow = build_workflow()
 
 @router.post('/upload-resume', response_model=StandardResponse)
 async def upload_resume(user_id: str, file: UploadFile = File(...)):
-    filename = (file.filename or 'resume').strip()
-    extension = filename.lower().split('.')[-1] if '.' in filename else ''
-
-    if extension not in {'pdf', 'docx'}:
-        raise HTTPException(status_code=400, detail='Only PDF and DOCX are supported.')
-
     content = await file.read()
+    filename = file.filename or 'resume'
 
-    try:
-        text = parse_pdf(content) if extension == 'pdf' else parse_docx(content)
-    except ParserError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if filename.lower().endswith('.pdf'):
+        text = parse_pdf(content)
+    elif filename.lower().endswith('.docx'):
+        text = parse_docx(content)
+    else:
+        raise HTTPException(status_code=400, detail='Only PDF and DOCX are supported.')
 
     resume_id = str(uuid4())
     data = {
@@ -41,17 +38,12 @@ async def upload_resume(user_id: str, file: UploadFile = File(...)):
         'file_name': filename,
         'raw_text': text,
     }
-
     try:
         get_supabase().table('resumes').insert(data).execute()
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f'Failed to save resume: {exc}') from exc
+    except Exception:
+        pass
 
-    return StandardResponse(
-        success=True,
-        message='Resume uploaded successfully.',
-        data={'resume_id': resume_id, 'file_type': extension, 'text_preview': text[:600]},
-    )
+    return StandardResponse(success=True, message='Resume uploaded.', data={'resume_id': resume_id, 'text_preview': text[:600]})
 
 
 @router.post('/submit-job-description', response_model=StandardResponse)
