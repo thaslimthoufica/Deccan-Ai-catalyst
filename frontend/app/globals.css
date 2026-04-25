@@ -3,13 +3,9 @@
 @tailwind utilities;
 
 body {
-  @apply text-slate-900;
+  @apply bg-slate-50 text-slate-900;
 }
 
 .card {
-  @apply rounded-xl bg-white shadow-lg border border-indigo-100 p-6;
-}
-
-.web-grid {
-  @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+  @apply rounded-xl bg-white shadow-sm border border-slate-200 p-6;
 }

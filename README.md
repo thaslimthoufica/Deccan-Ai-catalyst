@@ -51,44 +51,6 @@ This repository contains a deployment-ready **web app** MVP with:
     └── .env.example
 ```
 
-
-## VS Code Quick Start (if you can't see the app)
-
-If you open the repo root in VS Code, the runnable app is split into two folders:
-- `frontend/` → Next.js UI (what you'll see in browser)
-- `backend/` → FastAPI API
-
-### Steps
-1. Open this folder in VS Code: `Deccan-Ai-catalyst`
-2. Create env files:
-   - `backend/.env` from `backend/.env.example`
-   - `frontend/.env.local` from `frontend/.env.example`
-3. In VS Code terminal #1:
-   ```bash
-   cd backend
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   uvicorn app.main:app --reload --port 8000
-   ```
-4. In VS Code terminal #2:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-5. Open:
-   - Frontend app: `http://localhost:3000`
-   - Backend docs: `http://localhost:8000/docs`
-
-### Why you may think there is no app
-- If you only run the backend, no UI will appear; UI is in `frontend/`.
-- If dependencies are not installed in `frontend/`, Next.js won't start.
-- If `NEXT_PUBLIC_API_URL` is not set in `frontend/.env.local`, the UI cannot call backend endpoints.
-
-### Optional VS Code Task Runner
-This repo now includes `.vscode/tasks.json` and `.vscode/launch.json` so you can run backend/frontend from **Terminal → Run Task** and debug FastAPI from **Run and Debug**.
-
 ## 1) Backend Setup (FastAPI)
 
 ```bash
@@ -133,7 +95,7 @@ in your Supabase SQL editor to create required tables and enable `pgvector`.
 
 ### Frontend (`frontend/.env.local`)
 
-- `NEXT_PUBLIC_API_URL` (e.g. `http://localhost:8000`)
+- `NEXT_PUBLIC_API_BASE_URL` (e.g. `http://localhost:8000`)
 
 ## 5) MVP Workflow
 
@@ -160,7 +122,7 @@ LangGraph workflow nodes:
 
 ## 7) Deployment Notes
 
-- **Frontend (Vercel):** set `NEXT_PUBLIC_API_URL` to backend URL.
+- **Frontend (Vercel):** set `NEXT_PUBLIC_API_BASE_URL` to backend URL.
 - **Backend (Render/Railway):** set env vars and run `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
 - Use Supabase managed Postgres + Auth + Storage.
 
@@ -169,21 +131,3 @@ LangGraph workflow nodes:
 - Focuses on clear modularity, structured JSON LLM outputs, and resilient fallbacks.
 - Includes practical defaults for parsing and assessment flow.
 - Leaves advanced analytics and realtime sockets for later versions.
-
-
-## Web App UX Notes
-
-- This project is built as a desktop-first browser web app (not a mobile app).
-- Main navigation appears as a left sidebar on medium/large screens.
-- Use `http://localhost:3000` in a desktop browser for the best experience.
-
-
-## Upload Troubleshooting
-
-
-- Backend now has an in-memory fallback store when Supabase env vars are missing, so local assessment flow can run without cloud DB during development.
-- Resume upload supports only `.pdf` and `.docx` files.
-- If upload fails, the API now returns explicit parser errors such as:
-  - `No readable text found in PDF.`
-  - `Could not parse DOCX file.`
-- Intake is now combined on one page: `/upload-resume` (resume + job description together).
