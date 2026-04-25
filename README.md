@@ -51,44 +51,6 @@ This repository contains a deployment-ready **web app** MVP with:
     └── .env.example
 ```
 
-
-## VS Code Quick Start (if you can't see the app)
-
-If you open the repo root in VS Code, the runnable app is split into two folders:
-- `frontend/` → Next.js UI (what you'll see in browser)
-- `backend/` → FastAPI API
-
-### Steps
-1. Open this folder in VS Code: `Deccan-Ai-catalyst`
-2. Create env files:
-   - `backend/.env` from `backend/.env.example`
-   - `frontend/.env.local` from `frontend/.env.example`
-3. In VS Code terminal #1:
-   ```bash
-   cd backend
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   uvicorn app.main:app --reload --port 8000
-   ```
-4. In VS Code terminal #2:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-5. Open:
-   - Frontend app: `http://localhost:3000`
-   - Backend docs: `http://localhost:8000/docs`
-
-### Why you may think there is no app
-- If you only run the backend, no UI will appear; UI is in `frontend/`.
-- If dependencies are not installed in `frontend/`, Next.js won't start.
-- If `NEXT_PUBLIC_API_BASE_URL` is not set in `frontend/.env.local`, the UI cannot call backend endpoints.
-
-### Optional VS Code Task Runner
-This repo now includes `.vscode/tasks.json` and `.vscode/launch.json` so you can run backend/frontend from **Terminal → Run Task** and debug FastAPI from **Run and Debug**.
-
 ## 1) Backend Setup (FastAPI)
 
 ```bash
@@ -169,10 +131,3 @@ LangGraph workflow nodes:
 - Focuses on clear modularity, structured JSON LLM outputs, and resilient fallbacks.
 - Includes practical defaults for parsing and assessment flow.
 - Leaves advanced analytics and realtime sockets for later versions.
-
-
-## Web App UX Notes
-
-- This project is built as a desktop-first browser web app (not a mobile app).
-- Main navigation appears as a left sidebar on medium/large screens.
-- Use `http://localhost:3000` in a desktop browser for the best experience.
