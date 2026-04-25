@@ -9,3 +9,7 @@ body {
 .card {
   @apply rounded-xl bg-white shadow-sm border border-slate-200 p-6;
 }
+
+.web-grid {
+  @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+}

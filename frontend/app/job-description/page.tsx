@@ -25,17 +25,17 @@ export default function JobDescriptionPage() {
   }
 
   return (
-    <div className="card max-w-3xl space-y-4">
-      <h2 className="text-xl font-semibold">Submit Job Description</h2>
+    <div className="card max-w-5xl space-y-4">
+      <h2 className="text-2xl font-semibold">Web Form: Job Description Intake</h2>
       <form className="space-y-3" onSubmit={submitJD}>
         <input className="w-full border rounded-lg p-2" value={title} onChange={(e) => setTitle(e.target.value)} />
         <textarea
-          className="w-full h-64 border rounded-lg p-2"
-          placeholder="Paste job description..."
+          className="w-full h-72 border rounded-lg p-2"
+          placeholder="Paste the full role description here..."
           value={rawText}
           onChange={(e) => setRawText(e.target.value)}
         />
-        <button className="px-4 py-2 bg-brand text-white rounded-lg" disabled={loading || rawText.length < 20}>Submit JD</button>
+        <button className="px-4 py-2 bg-brand text-white rounded-lg" disabled={loading || rawText.length < 20}>Save Job Description</button>
       </form>
       {loading && <LoadingSpinner label="Extracting JD metadata..." />}
       {result && <pre className="text-xs bg-slate-100 p-3 rounded-lg overflow-auto">{JSON.stringify(result, null, 2)}</pre>}

@@ -1,6 +1,6 @@
 # AI-Powered Skill Assessment & Personalized Learning Plan Agent (MVP)
 
-This repository contains a deployment-ready MVP with:
+This repository contains a deployment-ready **web app** MVP with:
 - **Frontend**: Next.js + Tailwind CSS
 - **Backend**: FastAPI + LangGraph + OpenAI
 - **Database**: Supabase PostgreSQL + pgvector
@@ -169,3 +169,10 @@ LangGraph workflow nodes:
 - Focuses on clear modularity, structured JSON LLM outputs, and resilient fallbacks.
 - Includes practical defaults for parsing and assessment flow.
 - Leaves advanced analytics and realtime sockets for later versions.
+
+
+## Web App UX Notes
+
+- This project is built as a desktop-first browser web app (not a mobile app).
+- Main navigation appears as a left sidebar on medium/large screens.
+- Use `http://localhost:3000` in a desktop browser for the best experience.
