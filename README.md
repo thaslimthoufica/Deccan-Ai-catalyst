@@ -1,6 +1,6 @@
 # AI-Powered Skill Assessment & Personalized Learning Plan Agent (MVP)
 
-This repository contains a deployment-ready MVP with:
+This repository contains a deployment-ready **web app** MVP with:
 - **Frontend**: Next.js + Tailwind CSS
 - **Backend**: FastAPI + LangGraph + OpenAI
 - **Database**: Supabase PostgreSQL + pgvector
