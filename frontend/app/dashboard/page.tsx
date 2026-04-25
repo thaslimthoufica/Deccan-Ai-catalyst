@@ -42,36 +42,28 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Final Report Dashboard (Web)</h2>
-        <button className="px-4 py-2 bg-brand text-white rounded-lg" onClick={generateLearningPlan} disabled={loading}>
-          Save Learning Plan to DB
-        </button>
-      </div>
-
+      <h2 className="text-2xl font-semibold">Final Report Dashboard</h2>
       {loading && <LoadingSpinner label="Loading report..." />}
       {!loading && !finalReport && <p className="text-slate-600">No report available yet.</p>}
-
       {finalReport && (
-        <div className="grid xl:grid-cols-12 gap-4">
-          <section className="card xl:col-span-4">
-            <h3 className="font-semibold mb-2">Gap Analysis</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <section className="card">
+            <h3 className="font-semibold mb-2">Skill Match & Gaps</h3>
             <pre className="text-xs bg-slate-100 p-3 rounded-lg overflow-auto">{JSON.stringify(finalReport.gaps, null, 2)}</pre>
           </section>
-          <section className="card xl:col-span-4">
+          <section className="card">
             <h3 className="font-semibold mb-2">Skill Scores</h3>
             <pre className="text-xs bg-slate-100 p-3 rounded-lg overflow-auto">{JSON.stringify(finalReport.scores, null, 2)}</pre>
           </section>
-          <section className="card xl:col-span-4">
-            <h3 className="font-semibold mb-2">Skill Match</h3>
-            <pre className="text-xs bg-slate-100 p-3 rounded-lg overflow-auto">{JSON.stringify(finalReport.skill_match, null, 2)}</pre>
-          </section>
-          <section className="card xl:col-span-12">
+          <section className="card md:col-span-2">
             <h3 className="font-semibold mb-2">Personalized Learning Plan</h3>
             <pre className="text-xs bg-slate-100 p-3 rounded-lg overflow-auto">{JSON.stringify(finalReport.learning_plan, null, 2)}</pre>
           </section>
         </div>
       )}
+      <button className="px-4 py-2 bg-brand text-white rounded-lg" onClick={generateLearningPlan} disabled={loading}>
+        Save Learning Plan to DB
+      </button>
     </div>
   );
 }

@@ -20,11 +20,7 @@ class AssessmentState(TypedDict, total=False):
     report: dict[str, Any]
 
 
-def _llm_or_none():
-    try:
-        return LLMService()
-    except Exception:
-        return None
+llm = LLMService()
 
 
 def resume_parser_node(state: AssessmentState) -> AssessmentState:
@@ -48,10 +44,7 @@ def skill_matcher_node(state: AssessmentState) -> AssessmentState:
 def assessment_question_generator_node(state: AssessmentState) -> AssessmentState:
     skills = state.get('jd_data', {}).get('required_skills', [])[:8]
     prompt = f"Generate adaptive questions for skills: {skills}. Return JSON array 'questions' with skill, question."
-    llm = _llm_or_none()
     try:
-        if not llm:
-            raise ValueError('LLM unavailable')
         result = llm.json_completion('Generate concise technical assessment questions.', prompt)
         state['questions'] = result.get('questions', [])
     except Exception:
@@ -68,10 +61,7 @@ def answer_evaluator_node(state: AssessmentState) -> AssessmentState:
             'reason (short).'
             f"\nSkill: {item.get('skill')}\nAnswer: {item.get('answer')}"
         )
-        llm = _llm_or_none()
         try:
-            if not llm:
-                raise ValueError('LLM unavailable')
             eval_result = llm.json_completion('You are a strict technical interviewer.', prompt)
             scores.append(eval_result)
         except Exception:
@@ -101,10 +91,7 @@ def learning_plan_generator_node(state: AssessmentState) -> AssessmentState:
         'skill_name,current_level,target_level,learning_path,estimated_time,mini_project.'
         f' Skills: {skills}'
     )
-    llm = _llm_or_none()
     try:
-        if not llm:
-            raise ValueError('LLM unavailable')
         result = llm.json_completion('Generate practical upskilling plans for working professionals.', prompt)
         state['plan'] = result.get('plan', [])
     except Exception:
