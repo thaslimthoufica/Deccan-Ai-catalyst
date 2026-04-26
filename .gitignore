@@ -10,3 +10,9 @@ node_modules/
 *.exe
 frontend/.env.local
 backend/.env
+venv/ 
+node_modules/ 
+.next/ 
+__pycache__/ 
+.env 
+venv/ 
