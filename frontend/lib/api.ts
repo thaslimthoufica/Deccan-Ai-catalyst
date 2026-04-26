@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
+const API_BASE_URL = '/backend-api';
 
 export async function apiPost<T>(path: string, body?: object, isFormData = false): Promise<T> {
   const options: RequestInit = {
@@ -7,17 +7,33 @@ export async function apiPost<T>(path: string, body?: object, isFormData = false
     body: isFormData ? (body as FormData) : JSON.stringify(body ?? {}),
   };
 
-  const response = await fetch(`${API_BASE_URL}${path}`, options);
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, options);
+  } catch {
+    throw new Error('Cannot reach backend through the Next.js proxy. Make sure FastAPI is running on port 8000 and restart the frontend dev server.');
+  }
+
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    const errorBody = await response.json().catch(() => null);
+    const errorText = errorBody ? '' : await response.text().catch(() => '');
+    throw new Error(errorBody?.detail || errorText || `API error: ${response.status}`);
   }
   return response.json();
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`);
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`);
+  } catch {
+    throw new Error('Cannot reach backend through the Next.js proxy. Make sure FastAPI is running on port 8000 and restart the frontend dev server.');
+  }
+
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    const errorBody = await response.json().catch(() => null);
+    const errorText = errorBody ? '' : await response.text().catch(() => '');
+    throw new Error(errorBody?.detail || errorText || `API error: ${response.status}`);
   }
   return response.json();
 }

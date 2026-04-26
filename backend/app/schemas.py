@@ -7,6 +7,7 @@ class JobDescriptionInput(BaseModel):
     user_id: str
     title: str | None = None
     raw_text: str = Field(min_length=20)
+    available_time: str | None = None
 
 
 class ExtractSkillsInput(BaseModel):

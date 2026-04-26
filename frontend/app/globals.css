@@ -3,9 +3,21 @@
 @tailwind utilities;
 
 body {
-  @apply bg-slate-50 text-slate-900;
+  @apply min-h-screen bg-gradient-to-br from-sky-50 via-white to-emerald-50 text-slate-900;
 }
 
 .card {
-  @apply rounded-xl bg-white shadow-sm border border-slate-200 p-6;
+  @apply rounded-2xl bg-white/95 shadow-sm border border-slate-200 p-6;
+}
+
+.field {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-brand focus:ring-4 focus:ring-blue-100;
+}
+
+.primary-button {
+  @apply rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.secondary-button {
+  @apply rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-brand hover:text-brand;
 }

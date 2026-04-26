@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
 
 from app.api.routes import router
 from app.core.config import settings
@@ -14,6 +15,12 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+
+@app.middleware('http')
+async def log_requests(request: Request, call_next):
+    print(f'{request.method} {request.url.path}')
+    return await call_next(request)
 
 
 @app.get('/health')
